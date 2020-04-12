@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using CodeBlogFitness.BL;
 namespace CodeBlogFitness.BL.Model
 {
     /// <summary>
     /// Пользователь.
     /// </summary>
+    /// 
+    [Serializable]
    public class User
-    {/// <summary>
+    {
+        /// <summary>
      /// Имя.
      /// </summary>
      /// 
