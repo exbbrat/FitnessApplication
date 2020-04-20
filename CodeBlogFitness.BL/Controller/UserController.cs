@@ -17,35 +17,69 @@ namespace CodeBlogFitness.BL.Controller
         /// <summary>
         /// Пользователь приложения.
         /// </summary>
-        public User User { get; }
+        public List<User> Users  { get; }
 
+        public User CurrentUser { get; }
+
+        public bool IsnewUser { get; } = false;
         /// <summary>
         /// Создание нового контроллера пользователя.
         /// </summary>
         /// <param name="user"></param>
-        public UserController(string userName, string genderName, DateTime birdthDay, double weight, double height)
+        public UserController(string userName)
         {
-            // TODO: Проверка
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                throw new ArgumentNullException("Name user is Empty", nameof(userName));
+            }
+            Users = GetUsersData();
+            CurrentUser = Users.SingleOrDefault(u => u.Name == userName);
 
-            var gender = new Gender(genderName);
-            User = new User(userName, gender, birdthDay, weight, height);
+            if (CurrentUser == null)
+            {
+                CurrentUser = new User(userName);
+
+                Users.Add(CurrentUser);
+                IsnewUser = true;
+                Save(); 
+
+            }
+
         }
-
-        public UserController()
-        {
+        /// <summary>
+        /// Получить сохранненій список пользователей
+        /// </summary>
+        /// <returns></returns>
+        private List<User> GetUsersData()
+        {       
             var formatter = new BinaryFormatter();
 
             using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
             {
-                if (formatter.Deserialize(fs) is User user)
+                if (formatter.Deserialize(fs) is List<User> users)
                 {
-                    User = user;
+                   return users;
                 }
-
+                else
+                {
+                    return new List<User>();
+                }
                 // TODO: Что делать, если пользователя не прочитали? 
             }
         }
 
+
+        public void SetNewUserData(string genderName,DateTime birtDate,double weight = 1, double height = 1)
+        {
+            // Проверка 
+
+            CurrentUser.Gender = new Gender(genderName);
+            CurrentUser.BirthDate = birtDate;
+            CurrentUser.Weight = weight;
+            CurrentUser.Height = height;
+            Save();
+
+        }
         /// <summary>
         /// Сохранить данные пользователя.
         /// </summary>
@@ -55,7 +89,7 @@ namespace CodeBlogFitness.BL.Controller
 
             using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
             {
-                formatter.Serialize(fs, User);
+                formatter.Serialize(fs, Users);
             }
         }
 
