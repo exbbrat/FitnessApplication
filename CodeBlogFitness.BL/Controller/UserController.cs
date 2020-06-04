@@ -12,8 +12,9 @@ namespace CodeBlogFitness.BL.Controller
     /// <summary>
     /// Контроллер пользователя.
     /// </summary>
-    public class UserController
+    public class UserController: ControllerBase
     {
+        private const string USERS_FILE_NAME = "users.dat";
         /// <summary>
         /// Пользователь приложения.
         /// </summary>
@@ -51,23 +52,25 @@ namespace CodeBlogFitness.BL.Controller
         /// </summary>
         /// <returns></returns>
         private List<User> GetUsersData()
-        {       
-            var formatter = new BinaryFormatter();
+        {
+             return Load<List<User>>(USERS_FILE_NAME)?? new List<User>();
 
-            using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
-            {
-             //   fs.Length;
+            //var formatter = new BinaryFormatter();
 
-                if ( fs.Length > 0 && formatter.Deserialize(fs) is List<User> users)
-                {
-                   return users;
-                }
-                else
-                {
-                    return new List<User>();
-                }
-                // TODO: Что делать, если пользователя не прочитали? 
-            }
+            //using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
+            //{
+            // //   fs.Length;
+
+            //    if ( fs.Length > 0 && formatter.Deserialize(fs) is List<User> users)
+            //    {
+            //       return users;
+            //    }
+            //    else
+            //    {
+            //        return new List<User>();
+            //    }
+            //    // TODO: Что делать, если пользователя не прочитали? 
+            //}
         }
 
 
@@ -87,12 +90,13 @@ namespace CodeBlogFitness.BL.Controller
         /// </summary>
         public void Save()
         {
-            var formatter = new BinaryFormatter();
+            Save(USERS_FILE_NAME, Users);
+            //var formatter = new BinaryFormatter();
 
-            using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
-            {
-                formatter.Serialize(fs, Users);
-            }
+            //using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
+            //{
+            //    formatter.Serialize(fs, Users);
+            //}
         }
 
         /// <summary>
