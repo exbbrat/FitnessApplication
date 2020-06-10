@@ -117,7 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EnterName" xml:space="preserve">
+    <value>Введите Имя Пользователя Приложения</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Введите Свой Пол</value>
+  </data>
   <data name="Hello" xml:space="preserve">
-    <value>Вас приветствует приложение CodeBlogFitness</value>
+    <value>Вас Приветствует Приложение CodeBlogFitness</value>
   </data>
 </root>

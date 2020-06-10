@@ -16,7 +16,6 @@ namespace CodeBlogFitness.BL.Controller.Tests
         public void AddTest()
         {
             // Arrange
-
             var userName = Guid.NewGuid().ToString();
             var foodName = Guid.NewGuid().ToString();
             var rnd = new Random();
@@ -25,13 +24,10 @@ namespace CodeBlogFitness.BL.Controller.Tests
             var food = new Food(foodName, rnd.Next(50, 500), rnd.Next(50, 500),rnd.Next(50, 500), rnd.Next(50, 500));
 
             //Act 
-
             eatingController.Add(food, 100);
 
             // Assert
-
             Assert.AreEqual(food.Name, eatingController.Eating.Foods.First().Key.Name);
-
         }
     }
 }

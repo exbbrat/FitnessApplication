@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Resources;
 using CodeBlogFitness.BL.Controller;
 using CodeBlogFitness.BL.Model;
 
@@ -9,31 +11,22 @@ namespace CodeBlogFitness.CMD
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Вас приветствует приложение CodeBlogFitness");
+            var culture = CultureInfo.CreateSpecificCulture("en-us");
 
-            Console.WriteLine("Введите имя пользователя");
-            var name = Console.ReadLine();
+            var resourceManager = new ResourceManager("CodeBlogFitness.CMD.Languages.Messages", typeof(Program).Assembly);
 
 
-            //Console.WriteLine("Введите пол");
-            //var gender = Console.ReadLine();
+            Console.WriteLine(resourceManager.GetString("Hello",culture)); 
 
-            //Console.WriteLine("Введите дату рождения");
-            //var birthdate = DateTime.Parse(Console.ReadLine()); //TODO переписать
-
-            //Console.WriteLine("Введите вес");
-            //var weight = double.Parse(Console.ReadLine());
-
-            //Console.WriteLine("Введите рост");
-            //var height = double.Parse(Console.ReadLine());
-
+            Console.WriteLine(resourceManager.GetString("EnterName",culture));
+            var name = Console.ReadLine();            
 
 
             var userController = new UserController(name);
             var eatingConttroller = new EatingController(userController.CurrentUser);
 
             Console.WriteLine(userController.CurrentUser);
-
+            
             Console.WriteLine("Что вы хотите сделать?");
             Console.WriteLine("E - Ввести прием пищи ");
             var key = Console.ReadKey();
@@ -53,8 +46,7 @@ namespace CodeBlogFitness.CMD
             if (userController.IsnewUser)
             {
                 Console.WriteLine("Введите пол");
-                var gender = Console.ReadLine();
-
+                var gender = Console.ReadLine();                
                 DateTime birtDate =  ParseDateTime();
                 double weight = ParseDouble("Вес");
                 double height = ParseDouble("рост");
