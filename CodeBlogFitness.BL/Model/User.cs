@@ -14,15 +14,20 @@ namespace CodeBlogFitness.BL.Model
    public class User
     {
         /// <summary>
-     /// Имя.
-     /// </summary>
-     /// 
+        /// Имя.
+        /// </summary>
+        /// 
         #region Свойства Пользователя
-        public string Name { get; }
+             
+        public int Id { get; set; }
+
+        public string Name { get; set; }
         /// <summary>
         /// Пол.
         /// </summary>
-        public  Gender Gender { get; set; }
+        public  int ? GenderId { get; set; }
+
+        public virtual Gender Gender { get; set; }
         /// <summary>
         /// Дата Рождения.
         /// </summary>
@@ -37,9 +42,9 @@ namespace CodeBlogFitness.BL.Model
         /// 
         public double Height { get; set; }
 
-        //DateTime nowDate = DateTime.Today;
-        //int age = nowDate.Year - birtDate.Year;
-        //if( birtDate > nowDate.AddYears(-age))age --;
+        public virtual ICollection<Eating> Eatings { get; set; }
+
+        public virtual ICollection<Exercise> Exercises { get; set; }
         public int Age { get { return DateTime.Now.Year - BirthDate.Year; } }
 
         #endregion
@@ -52,9 +57,6 @@ namespace CodeBlogFitness.BL.Model
         /// <param name="weight">Вес.</param>
         /// <param name="height">Рост.</param>
         /// 
-
-
-
         public User( string name ,
                      Gender gender,
                      DateTime birthDate,
@@ -90,6 +92,8 @@ namespace CodeBlogFitness.BL.Model
             Weight = weight;
             Height = height;
         }
+
+        public User() { }
 
         public User(string name)
         {

@@ -13,8 +13,7 @@ namespace CodeBlogFitness.BL.Controller
     /// Контроллер пользователя.
     /// </summary>
     public class UserController: ControllerBase
-    {
-        private const string USERS_FILE_NAME = "users.dat";
+    { 
         /// <summary>
         /// Пользователь приложения.
         /// </summary>
@@ -22,7 +21,7 @@ namespace CodeBlogFitness.BL.Controller
 
         public User CurrentUser { get; }
 
-        public bool IsnewUser { get; } = false;
+        public bool IsNewUser { get; } = false;
         /// <summary>
         /// Создание нового контроллера пользователя.
         /// </summary>
@@ -31,7 +30,7 @@ namespace CodeBlogFitness.BL.Controller
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
-                throw new ArgumentNullException("Name user is Empty", nameof(userName));
+                throw new ArgumentNullException("Имя пользователя не может быть пустым", nameof(userName));
             }
             Users = GetUsersData();
             CurrentUser = Users.SingleOrDefault(u => u.Name == userName);
@@ -41,8 +40,7 @@ namespace CodeBlogFitness.BL.Controller
                 CurrentUser = new User(userName);
 
                 Users.Add(CurrentUser);
-                IsnewUser = true;
-                Save(); 
+                IsNewUser = true;
 
             }
 
@@ -53,24 +51,7 @@ namespace CodeBlogFitness.BL.Controller
         /// <returns></returns>
         private List<User> GetUsersData()
         {
-             return Load<List<User>>(USERS_FILE_NAME)?? new List<User>();
-
-            //var formatter = new BinaryFormatter();
-
-            //using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
-            //{
-            // //   fs.Length;
-
-            //    if ( fs.Length > 0 && formatter.Deserialize(fs) is List<User> users)
-            //    {
-            //       return users;
-            //    }
-            //    else
-            //    {
-            //        return new List<User>();
-            //    }
-            //    // TODO: Что делать, если пользователя не прочитали? 
-            //}
+            return Load<User>()?? new List<User>();
         }
 
 
@@ -90,13 +71,8 @@ namespace CodeBlogFitness.BL.Controller
         /// </summary>
         public void Save()
         {
-            Save(USERS_FILE_NAME, Users);
-            //var formatter = new BinaryFormatter();
-
-            //using (var fs = new FileStream("users.dat", FileMode.OpenOrCreate))
-            //{
-            //    formatter.Serialize(fs, Users);
-            //}
+            Save(Users);
+            
         }
 
         /// <summary>

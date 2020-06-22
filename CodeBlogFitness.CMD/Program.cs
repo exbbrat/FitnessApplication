@@ -11,82 +11,74 @@ namespace CodeBlogFitness.CMD
     {
         static void Main(string[] args)
         {
-            var culture = CultureInfo.CreateSpecificCulture("en-us");
 
+            var culture = CultureInfo.CreateSpecificCulture("en-us");
             var resourceManager = new ResourceManager("CodeBlogFitness.CMD.Languages.Messages", typeof(Program).Assembly);
 
+            Console.WriteLine(resourceManager.GetString("Hello", culture));
 
-            Console.WriteLine(resourceManager.GetString("Hello",culture)); 
-
-            Console.WriteLine(resourceManager.GetString("EnterName",culture));
-            var name = Console.ReadLine();            
-
+            Console.WriteLine(resourceManager.GetString("EnterName", culture));
+            var name = Console.ReadLine();
 
             var userController = new UserController(name);
-            var eatingConttroller = new EatingController(userController.CurrentUser);
+            var eatingController = new EatingController(userController.CurrentUser);
             var exerciseController = new ExerciseController(userController.CurrentUser);
+            if (userController.IsNewUser)
+            {
+                Console.Write("Введите пол: ");
+                var gender = Console.ReadLine();
+                var birthDate = ParseDateTime("дата рождения");
+                var weight = ParseDouble(" вес");
+                var height = ParseDouble(" рост");
+
+                userController.SetNewUserData(gender, birthDate, weight, height);
+            }
+
 
             Console.WriteLine(userController.CurrentUser);
-            
-            
+
+
 
             while (true)
             {
                 Console.WriteLine("Что вы хотите сделать?");
-                Console.WriteLine("E - Ввести прием пищи ");
-                Console.WriteLine("A- Ввести упражненеия");
+                Console.WriteLine("E - ввести прием пищи");
+                Console.WriteLine("A - ввести упражнение");
                 Console.WriteLine("Q - выход");
                 var key = Console.ReadKey();
                 Console.WriteLine();
-
-
                 switch (key.Key)
                 {
                     case ConsoleKey.E:
                         var foods = EnterEating();
-                        eatingConttroller.Add(foods.Food, foods.Weight);
+                        eatingController.Add(foods.Food, foods.Weight);
 
-                        foreach (var item in eatingConttroller.Eating.Foods)
+                        foreach (var item in eatingController.Eating.Foods)
                         {
-                            Console.WriteLine($"\t{item.Key} - {item.Value}");
+                            Console.WriteLine($" \t{item.Key} - {item.Value}");
                         }
                         break;
                     case ConsoleKey.A:
                         var exe = EnterExercise();
-                        // var exercise = new Exercise(exe.Begin, exe.End, exe.Activity, userController.CurrentUser);
-                        exerciseController.Add(exe.Activity,exe.Begin,exe.End);
-                        foreach(var item in exerciseController.Exercises)
-                        {
-                            Console.WriteLine($"\t{item.Activity} c {item.Start.ToShortTimeString()} до {item.Finish.ToShortTimeString()}");
-                        }
 
+                        exerciseController.Add(exe.Activity, exe.Begin, exe.End);
+
+                        foreach (var item in exerciseController.Exercises)
+                        {
+                            Console.WriteLine($"\t {item.Activity} c {item.Start.ToShortTimeString()} до {item.Finish.ToShortTimeString()}");
+                        }
                         break;
                     case ConsoleKey.Q:
                         Environment.Exit(0);
                         break;
-
                 }
+
+                Console.ReadLine();
             }
-
-            if (userController.IsnewUser)
-            {
-                Console.WriteLine("Введите пол");
-                var gender = Console.ReadLine();                
-                DateTime birtDate =  ParseDateTime("Дата Рождения");
-                double weight = ParseDouble("Вес");
-                double height = ParseDouble("рост");
-                //                while (DateTime.TryParse(Console.ReadLine(), out DateTime birtDate));
-
-                var birthdate = DateTime.Parse(Console.ReadLine());
-
-                userController.SetNewUserData(gender, birtDate, weight, height);
-
-            }
-            Console.ReadLine();
-            
         }
 
-        private static (DateTime Begin, DateTime End, Activity Activity) EnterExercise()
+
+            private static (DateTime Begin, DateTime End, Activity Activity) EnterExercise()
         {
             Console.WriteLine("Введите название упражнения:");
             var name = Console.ReadLine();
@@ -103,10 +95,10 @@ namespace CodeBlogFitness.CMD
         {
             Console.Write("Введите имя продукта: ");
             var food = Console.ReadLine();
-            var calories = ParseDouble("калорийность");
-            var prots= ParseDouble("белки");
-            var fats = ParseDouble("жиры"); 
-            var carbs =  ParseDouble("углеводы");
+            var calories = ParseDouble(" калорийность");
+            var prots= ParseDouble(" белки");
+            var fats = ParseDouble(" жиры"); 
+            var carbs =  ParseDouble(" углеводы");
 
 
             var product = new Food(food,calories,prots,fats,carbs);
@@ -142,7 +134,7 @@ namespace CodeBlogFitness.CMD
         {
             while (true)
             {
-                Console.Write($"Введите{name}:");
+                Console.Write($"Введите {name}:");
 
                 if (double.TryParse(Console.ReadLine(), out double value))
                 {
